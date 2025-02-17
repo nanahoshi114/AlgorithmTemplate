@@ -36,6 +36,5 @@ int main(){
         dq.push_back({i, arr[i]});
         if(i >= k) cout << dq.front().val << ' ';
     }
-    cout << 1;
     return 0;
 }
