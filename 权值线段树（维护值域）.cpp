@@ -1,0 +1,57 @@
+#include <vector>
+using namespace std;
+struct segtree{
+    struct Node{
+        int sum, ls, rs, l, r;
+        Node(){
+            sum = ls = rs = l = r = 0;
+        }
+    };
+    vector<Node> tree;
+    int range;
+    segtree(int _range) : range(_range){
+        tree.reserve(int(1e7 + 8));
+        tree.emplace_back();
+    }
+    void check(int &p){
+        if(!p){
+            p = tree.size();
+            tree.emplace_back();
+        }
+    }
+    void update(int p, int l, int r, int now){
+        tree[p].sum++;
+        if(l == r){
+            return ;
+        }
+        int mid = (l + r) >> 1;
+        if(now <= mid){
+            check(tree[p].ls);
+            update(tree[p].ls, l, mid, now);
+        }else{
+            check(tree[p].rs);
+            update(tree[p].rs, mid + 1, r, now);
+        }
+    }
+    int query(int p, int l, int r, int fl, int fr){
+        if(!p) return 0;
+        if(fl <= l && r <= fr) return tree[p].sum;
+        int res = 0, mid = (l + r) >> 1;
+        if(fl <= mid){
+            res += query(tree[p].ls, l, mid, fl, fr);
+        }
+        if(mid < fr){
+            res += query(tree[p].rs, mid + 1, r, fl, fr);
+        }
+        return res;
+    }
+    
+    void update(int x){
+        check(tree[0].ls);
+        update(tree[0].ls, 1, range, x);
+    }
+    int query(int l, int r){
+        if(l > r) return 0;
+        return query(tree[0].ls, 1, range, l, r);
+    }
+};
