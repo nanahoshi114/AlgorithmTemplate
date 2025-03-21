@@ -5,7 +5,7 @@ template <typename T>
 class sparseTable{
     vector<vector<T>> ST;
     vector<T> lgn;
-    function<T(const T &, const T &)> func;
+    function<T(T, T)> func;
 public:
     sparseTable(const vector<T> &org, function<T(T, T)> _func){
         func = _func;
