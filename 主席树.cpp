@@ -1,8 +1,8 @@
 #include <vector>
 using namespace std;
-struct persistentSegmentTree{ //查找第k小的数
+struct persistentSegmentTree{ 
     struct Node{
-        int ls, rs, sum; //sum：该点对应的范围[l, r]有几个数出现了
+        int ls, rs, sum; 
         Node(){
             ls = rs = sum = 0;
         }
@@ -11,9 +11,9 @@ struct persistentSegmentTree{ //查找第k小的数
         }
     };
     vector<Node> tree;
-    vector<int> root; //root[i]：第i个版本对应的[1, size]根节点
+    vector<int> root; 
     int size;
-    int build(int l, int r){ //建立一个空树
+    int build(int l, int r){ 
         int root = tree.size();
         tree.emplace_back();
         int mid = (l + r) >> 1;
@@ -35,7 +35,7 @@ struct persistentSegmentTree{ //查找第k小的数
         }
         return root;
     }
-    int query(int root, int l, int r, int k){
+    int query_find_rank_of_k(int root, int l, int r, int k){
         if(r <= k){
             return tree[root].sum;
         }
@@ -44,10 +44,22 @@ struct persistentSegmentTree{ //查找第k小的数
         }
         int mid = (l + r) >> 1, res = 0;
         if(k > mid){
-            res += query(tree[root].rs, mid + 1, r, k);
+            res += query_find_rank_of_k(tree[root].rs, mid + 1, r, k);
         }
-        res += query(tree[root].ls, l, mid, k);
+        res += query_find_rank_of_k(tree[root].ls, l, mid, k);
         return res;
+    }
+    int query_find_kth(int rootl, int rootr, int l, int r, int k){
+        if(l == r){
+            return l;
+        }
+        int mid = (l + r) >> 1;
+        int lsum = tree[tree[rootr].ls].sum - tree[tree[rootl].ls].sum;
+        if(lsum >= k){
+            return query_find_kth(tree[rootl].ls, tree[rootr].ls, l, mid, k);
+        }else{
+            return query_find_kth(tree[rootl].rs, tree[rootr].rs, mid + 1, r, k - lsum);
+        }
     }
     persistentSegmentTree(int _size) : size(_size){
         root.push_back(build(1, size));
@@ -55,7 +67,10 @@ struct persistentSegmentTree{ //查找第k小的数
     void update(int x){
         root.push_back(update(1, size, root.back(), x));
     }
-    int query(int l, int r, int k){
-        return query(root[r], 1, size, k) - query(root[l - 1], 1, size, k);
+    int query_find_rank_of_k(int l, int r, int k){
+        return query_find_rank_of_k(root[r], 1, size, k) - query_find_rank_of_k(root[l - 1], 1, size, k);
+    }
+    int query_find_kth(int l, int r, int k){
+        return query_find_kth(root[l - 1], root[r], 1, size, k);
     }
 };
