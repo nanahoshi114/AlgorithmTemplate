@@ -45,7 +45,17 @@ struct segtree{
         }
         return res;
     }
-    
+    int query_kth(int p, int l, int r, int k){
+        if(!p || tree[p].sum == 0) return -1;
+        if(l == r) return l;
+        int mid = (l + r) >> 1;
+        int lsize = tree[p].ls ? tree[tree[p].ls].sum : 0;
+        if(lsize >= k){
+            return query_kth(tree[p].ls, l, mid, k);
+        }else{
+            return query_kth(tree[p].rs, mid + 1, r, k - lsize);
+        }
+    }
     void update(int x){
         check(tree[0].ls);
         update(tree[0].ls, 1, range, x);
