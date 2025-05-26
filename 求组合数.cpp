@@ -30,7 +30,7 @@ class ConbinatorialNumber{
         }
     }
 public:
-    explicit ConbinatorialNumber(ll size, ll _P) : pret(2, 1), inv(int(5e6) + 5){
+    ConbinatorialNumber(ll size, ll _P) : pret(2, 1), inv(int(5e6) + 5){
         P = _P;
         make(size, P);
     }

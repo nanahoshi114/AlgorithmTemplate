@@ -3,7 +3,7 @@ using namespace std;
 class Highnum{
     string s;
 public:
-    explicit Highnum(string x){
+    Highnum(string x){
         s = x;
     }
     void operator=(string x){

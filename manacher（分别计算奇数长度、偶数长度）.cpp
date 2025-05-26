@@ -2,7 +2,6 @@
 #include <vector>
 using namespace std;
 pair<vector<int>, vector<int>> manacher(const string &s){
-    //d1：奇数长度的回文串长度，d1[i]：以s[i]为中心的回文串个数；d2：偶数长度的回文串长度
     vector<int> d1(s.size() + 5, 0), d2(s.size() + 5, 0); 
     for(int i = 0, l = 0, r = -1; i < s.size(); i++){
         if(i <= r) d1[i] = min(d1[l + r - i], r - i + 1);

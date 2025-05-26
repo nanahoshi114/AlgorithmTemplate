@@ -14,7 +14,7 @@ struct node{
 struct Edge{
     int to, next, v;
 }edge[M];
-int head[M]/*head[i]: i号节点的第一条边的下标*/, cnt, n, m, s, dis[M];
+int head[M], cnt, n, m, s, dis[M];
 bool vis[M];
 void add(int u, int d, int v){
     edge[cnt].next = head[u];

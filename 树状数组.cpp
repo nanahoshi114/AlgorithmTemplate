@@ -5,7 +5,7 @@ class binaryIndexedTree{
     ll lowbit(ll x){
         return x & -x;
     }
-    vector<ll> *org;
+    const vector<ll> &org;
     vector<ll> tree;
     int size;
     ll query(int x){
@@ -17,12 +17,11 @@ class binaryIndexedTree{
         return ans;
     }
 public:
-    binaryIndexedTree(vector<ll> *_org, int _size) : tree(_size + 5){ //initialize
-        org = _org;
+    binaryIndexedTree(const vector<ll> &_org, int _size) : tree(_size + 5), org(_org) { //initialize
         size = _size;
         for(int i = 1; i <= size; i++){
             for(int j = i; j <= size; j += lowbit(j)){ //the father of tree[j] is tree[j + lowbit(j)]
-                tree[j] += org->at(i);
+                tree[j] += org[i];
             }
         }
     }

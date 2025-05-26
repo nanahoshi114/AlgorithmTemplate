@@ -13,7 +13,7 @@ void add(int u, int v){
     edge.push_back({v, head[u]});
     head[u] = edge.size() - 1;
 }
-vector<int> toposort(){
+auto toposort(){
     vector<int> ans;
     queue<int> S;
     for(int i = 1; i <= n; i++){
