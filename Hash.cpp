@@ -54,3 +54,11 @@ public:
         return query(l1, r1) == query(l2, r2);
     }
 };
+//重载哈希
+namespace std {
+    template<> struct hash<std::pair<u64, u64>> {
+        auto operator()(const std::pair<u64, u64>& x) const {
+            return std::hash<u64>()(x.first) ^ std::hash<u64>()(x.second);
+        }
+    };
+};
