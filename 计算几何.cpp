@@ -1,6 +1,7 @@
 #include <cmath>
 #include <utility>
 #include <algorithm>
+#include <tuple>
 using ld = long double;
 const ld pi = std::acos(-1.0);
 const ld EPS = 1e-7;
@@ -155,3 +156,75 @@ Ld midSegment(Ld l) {
     auto mid = (l.a + l.b) / 2;
     return {mid, mid + rotate(l.a, l.b)};
 }
+
+std::tuple<int, Pd, Pd> getSegmentIntersection(Ld l1, Ld l2) {
+    auto [s1, e1] = l1;
+    auto [s2, e2] = l2;
+    auto A = std::max(s1.x, e1.x), AA = std::min(s1.x, e1.x);
+    auto B = std::max(s1.y, e1.y), BB = std::min(s1.y, e1.y);
+    auto C = std::max(s2.x, e2.x), CC = std::min(s2.x, e2.x);
+    auto D = std::max(s2.y, e2.y), DD = std::min(s2.y, e2.y);
+    if (A < CC || C < AA || B < DD || D < BB) {
+        return {0, {}, {}};
+    }
+    if (sign(cross(e1 - s1, e2 - s2)) == 0) {
+        if (sign(cross(s2, e1, s1)) != 0) {
+            return {0, {}, {}};
+        }
+        Point p1(std::max(AA, CC), std::max(BB, DD));
+        Point p2(std::min(A, C), std::min(B, D));
+        if (!is_PointOnSegment(p1, l1)) {
+            std::swap(p1.y, p2.y);
+        }
+        if (p1 == p2) {
+            return {3, p1, p2};
+        } else {
+            return {2, p1, p2};
+        }
+    }
+    auto cp1 = cross(s2 - s1, e1 - s1), cp2 = cross(s2 - e1, e2 - e1), 
+         cp3 = cross(s1 - s2, e1 - s2), cp4 = cross(s1 - e2, e1 - e2);
+    if(sign(cp1 * cp2) == 1 || sign(cp3 * cp4)) {
+        return {0, {}, {}};
+    }
+    Pd p = getLineIntersection(l1, l2);
+    if (sign(cp1) != 0 && sign(cp2) != 0 && sign(cp3) != 0 && sign(cp4) != 0) {
+        return {1, p, p};
+    } else {
+        return {3, p, p};
+    }
+}
+
+bool is_SegmentIntersection(Ld l1, Ld l2) {
+    auto [s1, e1] = l1;
+    auto [s2, e2] = l2;
+    auto A = std::max(s1.x, e1.x), AA = std::min(s1.x, e1.x);
+    auto B = std::max(s1.y, e1.y), BB = std::min(s1.y, e1.y);
+    auto C = std::max(s2.x, e2.x), CC = std::min(s2.x, e2.x);
+    auto D = std::max(s2.y, e2.y), DD = std::min(s2.y, e2.y);
+    return A >= CC && B >= DD && C >= AA && D >= BB
+        && sign(cross(s1, s2, e1) * cross(s1, e1, e2)) == 1
+        && sign(cross(s2, s1, e2) * cross(s2, e2, e1)) == 1;
+}
+
+std::pair<Pd, ld> getPointToCircle(Pd p, Pd o, ld r) {
+    Pd U = o, V = o;
+    ld d = dis(p, o);
+    if (sign(d) == 0) {
+        return {o, 0};
+    }
+    ld val1 = r * abs(o.x - p.x) / d;
+    ld val2 = r * abs(o.y - p.y) / d * (sign((o.x - p.x) * (o.y - p.y)) < 0 ? -1 : 1);
+    U.x += val1, U.y += val2;
+    V.x -= val1, V.y -= val2;
+    if (dis(U, p) < dis(V, p)) {
+        return {U, dis(U, p)};
+    } else {
+        return {V, dis(V, p)};
+    }
+}
+
+Pd getPointOnCircle(Pd p, ld r, ld rad) {
+    return {p.x + std::cos(rad) * r, p.y + std::sin(rad) * r};
+}
+
