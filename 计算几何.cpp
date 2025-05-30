@@ -6,10 +6,10 @@ using ld = long double;
 const ld pi = std::acos(-1.0);
 const ld EPS = 1e-7;
 
-bool equal(auto&& x, auto&& y) {
+bool equal(auto x, auto y) {
     return -EPS < (x - y) && (x - y) < EPS;
 }
-int sign(auto&& x) {
+int sign(auto x) {
     if(-EPS < x && x < EPS) return 0;
     return x < 0 ? -1 : 1;
 }
@@ -17,7 +17,7 @@ template<typename T = ld>
 struct Point{
     T x, y;
     Point() : x(), y() {}
-    Point(auto&& _x, auto&& _y) : x(T(_x)), y(T(_y)) {}
+    Point(auto _x, auto _y) : x(T(_x)), y(T(_y)) {}
     Point operator-(Point _r) const {
         return {x - _r.x, y - _r.y};
     }
@@ -228,3 +228,22 @@ Pd getPointOnCircle(Pd p, ld r, ld rad) {
     return {p.x + std::cos(rad) * r, p.y + std::sin(rad) * r};
 }
 
+std::tuple<int, Pd, Pd> getLineCircleCross(Ld l, Pd o, ld r) {
+    Pd p = project(o, l);
+    ld d = dis(p, o), tmp = r * r - d * d;
+    if (sign(tmp) == -1) {
+        return {0, {}, {}};
+    } else if (sign(tmp) == 0) {
+        return {1, p, {}};
+    }
+    Pd vec = standardlize(l.b - l.a) * sqrt(tmp);
+    return {2, p + vec, p - vec};
+}
+
+std::tuple<int, Pd, Pd> getSegmentCricleCross(Ld l, Pd o, ld r) {
+    auto [type, U, V] = getLineCircleCross(l, o, r);
+    bool f1 = is_PointOnSegment(U, l), f2 = is_PointOnSegment(V, l);
+    if (type == 1 && f1) {
+        
+    }
+}
