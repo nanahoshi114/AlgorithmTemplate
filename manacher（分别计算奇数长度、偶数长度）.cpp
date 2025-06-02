@@ -1,10 +1,9 @@
 #include <string>
 #include <vector>
-using namespace std;
-pair<vector<int>, vector<int>> manacher(const string &s){
-    vector<int> d1(s.size() + 5, 0), d2(s.size() + 5, 0); 
+std::pair<std::vector<int>, std::vector<int>> manacher(const std::string &s){
+    std::vector<int> d1(s.size() + 5, 0), d2(s.size() + 5, 0); 
     for(int i = 0, l = 0, r = -1; i < s.size(); i++){
-        if(i <= r) d1[i] = min(d1[l + r - i], r - i + 1);
+        if(i <= r) d1[i] = std::min(d1[l + r - i], r - i + 1);
         while(0 <= i - d1[i] && i + d1[i] < s.size() && s[i - d1[i]] == s[i + d1[i]]){
             d1[i]++;
         }
@@ -14,7 +13,7 @@ pair<vector<int>, vector<int>> manacher(const string &s){
         }
     }
     for(int i = 0, l = 0, r = -1; i < s.size(); i++){
-        if(i <= r) d2[i] = min(d2[l + r - i + 1], r - i + 1);
+        if(i <= r) d2[i] = std::min(d2[l + r - i + 1], r - i + 1);
         while(0 <= i - d2[i] - 1 && i + d2[i] < s.size() && s[i - d2[i] - 1] == s[i + d2[i]]){
             d2[i]++;
         }
