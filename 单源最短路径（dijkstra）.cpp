@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <numeric>
 struct Node {
     int pos, dis;
     bool operator<(Node _r) const {
@@ -20,6 +21,7 @@ auto dijkstra(GraphEdge& edge, int st) {
     std::priority_queue<Node> que;
     std::vector<char> vis(edge.size(), 0);
     std::vector<int> dis(edge.size(), std::numeric_limits<int>().max());
+    dis[st] = 0;
     que.push({st, 0});
     while (!que.empty()) {
         Node now = que.top();
