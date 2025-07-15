@@ -8,10 +8,10 @@ private:
 
 public:
     UnionFind(int n) {
-        parent.resize(n);
-        rank.resize(n, 0);
+        parent.resize(n + 1);
+        rank.resize(n + 1, 0);
         count = n; 
-        for (int i = 0; i < n; ++i) {
+        for (int i = 1; i <= n; ++i) {
             parent[i] = i;
         }
     }
