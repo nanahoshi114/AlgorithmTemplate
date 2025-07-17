@@ -1,6 +1,15 @@
 #include <cstdio>
 #include <cctype>
-
+char fast_getchar() {
+	static char buf[1 << 20];
+	static char *pos = buf, *end = buf;
+	if (pos == end) {
+		end = buf + fread(buf, 1, sizeof(buf), stdin);
+		pos = buf;
+		if (pos == end) return EOF;
+	}
+	return *pos++;
+}
 template <typename T>
 T read(){
     T sum = 0, fl = 1;

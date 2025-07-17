@@ -1,13 +1,13 @@
 #include <vector>
 #include <functional>
-using namespace std;
+
 template <typename T>
 class sparseTable{
-    vector<vector<T>> ST;
-    vector<T> lgn;
-    function<T(const T &, const T &)> func;
+    std::vector<std::vector<T>> ST;
+    std::vector<T> lgn;
+    std::function<T(const T &, const T &)> func;
 public:
-    sparseTable(const vector<T> &org, function<T(const T &, const T &)> _func){
+    sparseTable(const std::vector<T> &org, std::function<T(const T &, const T &)> _func){
         func = _func;
         int sz = org.size() - 1;
         lgn.assign(sz + 5, 0);
@@ -16,7 +16,7 @@ public:
             lgn[i] = lgn[i / 2] + 1;
         }
         //ST.assign(sz + 5, vector<T>(lgn[sz] + 5));
-        ST.assign(lgn[sz] + 5, vector<T>(sz + 5));
+        ST.assign(lgn[sz] + 5, std::vector<T>(sz + 5));
         for(int i = 1; i <= sz; i++){
             ST[0][i] = org[i];
         }

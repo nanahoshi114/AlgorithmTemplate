@@ -4,13 +4,12 @@
 using namespace std;
 using ll = long long;
 using ull = unsigned long long;
+std::mt19937 generator(43);
 struct Hash{
-    random_device rd;
-    mt19937 generator;
     uniform_int_distribution<ull> rnd;
     ull M1, M2;
     ull base = 131;
-    Hash() : generator(rd()), rnd(1e8, 1e9) {
+    Hash() : rnd(1e8, 1e9) {
         M1 = rnd(generator);
         M2 = rnd(generator);
     }
@@ -25,14 +24,12 @@ struct Hash{
 };
 using u64 = unsigned long long;
 class Hash_RangeQuery {
-    std::random_device rd;
-    std::mt19937 generator;
     std::uniform_int_distribution<u64> rnd;
     u64 M1, M2;
     u64 base = 131;
     std::vector<std::array<u64, 2>> prem, preb;
 public:
-    explicit Hash_RangeQuery(const std::string& s) : generator(rd()), rnd(1e8, 1e9) {
+    explicit Hash_RangeQuery(const std::string& s) : rnd(1e8, 1e9) {
         M1 = rnd(generator);
         M2 = rnd(generator);
         prem.assign(s.size() + 1, std::array{0ull, 0ull});
