@@ -2,36 +2,23 @@
 #include <ranges>
 #include <random>
 using namespace std;
-using ll = long long;
-using ull = unsigned long long;
+using i64 = long long;
 std::mt19937 generator(43);
-struct Hash{
-    uniform_int_distribution<ull> rnd;
-    ull M1, M2;
-    ull base = 131;
-    Hash() : rnd(1e8, 1e9) {
-        M1 = rnd(generator);
-        M2 = rnd(generator);
+std::uniform_int_distribution<i64> rnd(1e8, 1e9);
+const i64 M1 = rnd(generator), M2 = rnd(generator), base = 131;
+auto get_hash(const string &s){
+    i64 res1 = 0, res2 = 0;
+    for(auto &i : s){
+        res1 = (res1 * base + i) % M1;
+        res2 = (res2 * base + i) % M2;
     }
-    auto get_hash(const string &s){
-        ull res1 = 0, res2 = 0;
-        for(auto &i : s){
-            res1 = (res1 * base + i) % M1;
-            res2 = (res2 * base + i) % M2;
-        }
-        return pair(res1, res2);
-    }
-};
+    return pair(res1, res2);
+}
 using u64 = unsigned long long;
 class Hash_RangeQuery {
-    std::uniform_int_distribution<u64> rnd;
-    u64 M1, M2;
-    u64 base = 131;
     std::vector<std::array<u64, 2>> prem, preb;
 public:
-    explicit Hash_RangeQuery(const std::string& s) : rnd(1e8, 1e9) {
-        M1 = rnd(generator);
-        M2 = rnd(generator);
+    explicit Hash_RangeQuery(const std::string& s) {
         prem.assign(s.size() + 1, std::array{0ull, 0ull});
         preb.assign(s.size() + 1, std::array{0ull, 0ull});
         for(int i = 1; i <= s.size(); i++){
