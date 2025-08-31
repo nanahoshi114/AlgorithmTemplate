@@ -8,8 +8,8 @@
 #include <algorithm>
 class dynamic_bitset {
     using ele_type = unsigned long long;
-    const ele_type max_value = std::numeric_limits<ele_type>::max();
-    ele_type get_spec_bit(size_t l, size_t r) const {
+    static const ele_type max_value = std::numeric_limits<ele_type>::max();
+    static ele_type get_spec_bit(size_t l, size_t r) {
         return ((r == 63 ? max_value : ((1ull << (r + 1)) - 1)) >> l) << l;
     }
     std::vector<ele_type> ele;
@@ -43,15 +43,7 @@ public:
         --size;
     }
     void resize(size_t _size) {
-        if (size < _size) {
-            for (size_t i = size / 64 + 1; i <= _size / 64; ++i) {
-                ele.push_back(0ull);
-            }
-        } else if (size > _size) {
-            for (size_t i = size / 64 - 1; i >= _size / 64; --i) {
-                ele.pop_back();
-            }
-        }
+        ele.resize(_size / 64 + 1);
         size = _size;
     }
     void range_set(size_t lpos, size_t rpos, bool val) {
