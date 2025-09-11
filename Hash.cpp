@@ -39,10 +39,10 @@ public:
     }
 };
 //重载哈希
-namespace std {
-    template<> struct hash<std::pair<u64, u64>> {
-        auto operator()(const std::pair<u64, u64>& x) const {
-            return std::hash<u64>()(x.first) ^ std::hash<u64>()(x.second);
-        }
-    };
+struct MyHash {
+    auto operator()(std::pair<int, int> x) {
+        auto hash1 = std::hash<int>{}(x.first);
+        auto hash2 = std::hash<int>{}(x.second);
+        return hash1 ^ (hash2 + 0x9e3779b9 + (hash1 << 6) + (hash1 >> 2));
+    }  
 };
