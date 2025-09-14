@@ -62,6 +62,7 @@ struct persistentSegmentTree{
         }
     }
     persistentSegmentTree(int _size) : size(_size){
+        root.reserve(1000000);
         root.push_back(build(1, size));
     }
     void update(int x){

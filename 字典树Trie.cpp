@@ -11,6 +11,7 @@ struct Node{
 using TrieTree = std::vector<Node>;
 auto make_TrieTree() {
     TrieTree tree;
+    tree.reserve(1000000);
     tree.emplace_back();
     return tree;
 }
