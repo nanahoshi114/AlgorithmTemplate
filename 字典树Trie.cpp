@@ -2,6 +2,58 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <algorithm>
+namespace Trie {
+    constexpr int MAX_TRIE = 3E6 + 5;
+    constexpr int MAX_NODE_SIZE = 26 + 26 + 10;
+    struct Node {
+        int count = 0;
+        int next[MAX_NODE_SIZE];
+    };
+    std::vector<Node> tree;
+    void init() {
+        if (tree.capacity() < MAX_TRIE) {
+            tree.reserve(MAX_TRIE);
+        }
+        tree.clear();
+        tree.push_back(Node{});
+    }
+    int newNode() {
+        tree.push_back(Node{});
+        return tree.size() - 1;
+    }
+    int get_pos(char c) {
+        if (std::isupper(c)) {
+            return c - 'A';
+        } else if (std::islower(c)) {
+            return c - 'a' + 26;
+        } else {
+            return c - '0' + 52;
+        }
+    }
+    void insert(const std::string &s) {
+        int cur = 0;
+        for (auto c : s) {
+            int pos = get_pos(c);
+            if (!tree[cur].next[pos]) {
+                tree[cur].next[pos] = newNode();
+            }
+            cur = tree[cur].next[pos];
+            ++tree[cur].count;
+        }
+    }
+    int find_prefix(const std::string &s) {
+        int cur = 0;
+        for (auto c : s) {
+            int pos = get_pos(c);
+            if (!tree[cur].next[pos]) {
+                return 0;
+            }
+            cur = tree[cur].next[pos];
+        }
+        return tree[cur].count;
+    }
+}
 //No closure ver
 struct Node{
     std::unordered_map<char, int> next;
