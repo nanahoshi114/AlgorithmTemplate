@@ -4,7 +4,7 @@
 using i64 = long long;
 constexpr int MAXN = 10000001;
 constexpr i64 mod = 1e9 + 7;
-i64 fastPow(i64 a, i64 b) {
+i64 qpow(i64 a, i64 b) {
     i64 result = 1;
     a = a % mod;
     while (b > 0) {
@@ -24,7 +24,7 @@ public:
         for (i64 i = 1; i < MAXN; ++i) {
             pret[i] = pret[i - 1] * i % mod;
         }
-        inv[MAXN - 1] = fastPow(pret[MAXN - 1], mod - 2);
+        inv[MAXN - 1] = qpow(pret[MAXN - 1], mod - 2);
         for (i64 i = MAXN - 2; i >= 0; --i) {
             inv[i] = inv[i + 1] * (i + 1) % mod;
         }

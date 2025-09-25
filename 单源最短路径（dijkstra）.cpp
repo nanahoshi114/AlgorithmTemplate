@@ -20,7 +20,7 @@ void add(GraphEdge& edge, int u, int to, int dis) {
 auto dijkstra(GraphEdge& edge, int st) {
     std::priority_queue<Node> que;
     std::vector<char> vis(edge.size(), 0);
-    std::vector<int> dis(edge.size(), std::numeric_limits<int>().max());
+    std::vector<int> dis(edge.size(), std::numeric_limits<int>::max());
     dis[st] = 0;
     que.push({st, 0});
     while (!que.empty()) {

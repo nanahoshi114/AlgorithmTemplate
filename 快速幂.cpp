@@ -1,6 +1,8 @@
-using ll = long long;
-ll fastPow(ll a, ll b, ll mod) {
-    ll result = 1;
+using i64 = long long;
+
+constexpr i64 mod = 1e9 + 7;
+i64 qpow(i64 a, i64 b) {
+    i64 result = 1;
     a = a % mod;
     while (b > 0) {
         if (b & 1) {
