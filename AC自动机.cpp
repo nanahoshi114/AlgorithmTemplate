@@ -1,8 +1,82 @@
 #include <vector>
 #include <queue>
 #include <unordered_map>
+#include <algorithm>
 constexpr int MAX_NODE = 2e5 + 5;
 using i64 = long long;
+namespace AC { 
+    struct TrieNode {
+        int next[26] = {};
+        bool is_end = false;
+        std::size_t end_hash = 0;
+    } tree[MAX_NODE];
+    int fail[MAX_NODE], node_cnt;
+    std::vector<int> fail_tree[MAX_NODE];
+    auto new_node() {
+        tree[node_cnt++] = TrieNode{};
+        return node_cnt - 1;
+    }
+    void reset() {
+        tree[0] = {};
+        node_cnt = 1;
+    }
+    void insert(std::string_view s, std::size_t hash) {
+        int cur = 0;
+        for (auto c : s) {
+            if (!tree[cur].next[c - 'a']) {
+                tree[cur].next[c - 'a'] = new_node();
+            }
+            cur = tree[cur].next[c - 'a'];
+        }
+        tree[cur].is_end = true;
+        tree[cur].end_hash = hash;
+    }
+    void build_AC() {
+        std::fill(fail, fail + node_cnt, 0);
+        std::for_each(fail_tree, fail_tree + node_cnt, [](auto& v) { v.clear(); });
+        std::queue<int> que;
+        for (auto i : tree[0].next) {
+            if (i) {
+                que.push(i);
+                fail_tree[0].push_back(i);
+            } 
+        }
+        while (!que.empty()) {
+            int now = que.front();
+            que.pop();
+            for (int i = 0; i < 26; ++i) {
+                int& next = tree[now].next[i];
+                if (next) {
+                    fail[next] = tree[fail[now]].next[i]; 
+                    fail_tree[tree[fail[now]].next[i]].push_back(next);
+                    que.push(next);
+                } else {
+                    next = tree[fail[now]].next[i];
+                }
+            }
+        }
+    }
+    auto query_AC(std::string_view s) {
+        int cur = 0;
+        std::unordered_map<std::size_t, int> occ;
+        std::vector<int> ans(node_cnt);
+        for (auto c : s) {
+            cur = tree[cur].next[c - 'a'];
+            ++ans[cur];
+        }
+        auto dfs = [&](auto&& self, int now) -> void {
+            for (int next : fail_tree[now]) {
+                self(self, next);
+                ans[now] += ans[next];
+            }
+            if (tree[now].is_end && ans[now]) {
+                occ[tree[now].end_hash] = ans[now];
+            }
+        };
+        dfs(dfs, 0);
+        return occ;
+    }
+}
 class AC_automata { //查询字符串出现次数，建图dfs优化查询
     struct TrieNode {
         int next[26] = {};
