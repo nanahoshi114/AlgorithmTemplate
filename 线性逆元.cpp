@@ -1,25 +1,12 @@
-#include <vector>
-using namespace std;
-class Inv{
-private:
-    using ll = long long;
-    vector<ll> vec;
-    ll mod;
-public:
-    explicit Inv(ll size, ll p) : vec(size + 1){
-        mod = p;
-        vec[0] = vec[1] = 1;
-        for(ll i = 2; i <= size; i++){
-            vec[i] = (p - p / i * vec[p % i] % p) % p;
+constexpr int MAXN = 1000005;
+using i64 = long long;
+constexpr i64 mod = 1e9 + 7;
+i64 inv_arr[MAXN];
+struct Inv_initor {
+    Inv_initor() {
+        inv_arr[0] = inv_arr[1] = 1;
+        for (i64 i = 2; i < MAXN; ++i) {
+            inv_arr[i] = (mod - mod / i * inv_arr[mod % i] % mod) % mod;
         }
     }
-    void extend(ll size){
-        if(vec.size() - 1 >= size) return;
-        for(int i = vec.size(); i <= size; i++){
-            vec.push_back((mod - mod / i * vec[mod % i] % mod) % mod);
-        }
-    }
-    ll operator[](ll index){
-        return vec[index];
-    }
-};
+} inv_initor;

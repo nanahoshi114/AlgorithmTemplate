@@ -3,10 +3,10 @@
 #include <bitset>
 constexpr int M = 1e8 + 1;
 using i64 = long long;
-struct Prime {
-    std::bitset<M> prime_flag;
-    std::vector<int> prime_list;
-    Prime() {
+std::bitset<M> prime_flag;
+std::vector<int> prime_list;
+struct Prime_Initor {
+    Prime_Initor() {
         prime_flag.set();
         prime_flag[1] = 0;
         for(int i = 2; i < M; i++){
@@ -20,7 +20,7 @@ struct Prime {
             }
         }
     }
-} prime;
+} prime_initor;
 int main(){
     std::cin.tie(nullptr)->sync_with_stdio(false);
     std::cout.tie(nullptr);
@@ -29,7 +29,7 @@ int main(){
     while(q--){
         int t;
         std::cin >> t;
-        std::cout << prime.prime_list[t - 1] << '\n';
+        std::cout << prime_list[t - 1] << '\n';
     }
     return 0;
 }
