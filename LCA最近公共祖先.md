@@ -1,3 +1,4 @@
+```cpp
 #include <vector>
 using GraphEdge = std::vector<std::vector<int>>;
 class LCA {
@@ -36,3 +37,4 @@ public:
         return pa[x][0];
     }
 };
+```
