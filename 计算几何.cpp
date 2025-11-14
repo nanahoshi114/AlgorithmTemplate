@@ -16,8 +16,6 @@ int sign(auto x) {
 template<typename T = ld>
 struct Point{
     T x, y;
-    Point() : x(), y() {}
-    Point(auto _x, auto _y) : x(T(_x)), y(T(_y)) {}
     Point operator-(Point _r) const {
         return {x - _r.x, y - _r.y};
     }
@@ -41,18 +39,22 @@ struct Point{
     friend Point operator/(Point _l, T _r) {
         return {_l.x / _r, _l.y / _r};
     }
-    bool operator==(Point _r) const {
-        return equal(x, _r.x) && equal(y, _r.y);
-    }
+    auto operator<=>(const Point &) const = default;
 };
-
 
 template<typename T = ld>
 struct Line{
     Point<T> a, b;
-    Line(Point<T> _l, Point<T> _r) : a(_l.x, _l.y), b(_r.x, _r.y) {}
     auto get_vec() const {
         return b - a;
+    }
+    auto distance() const {
+        T val = (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+        return std::sqrt(val);
+    }
+    friend auto operator*(const Line<T> &_l, const Line<T> &_r) {
+        auto vecl = _l.get_vec(), vecr = _r.get_vec();
+        return vecl.x * vecr.y - vecl.y * vecr.x;
     }
 };
 
